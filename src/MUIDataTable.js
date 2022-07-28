@@ -1932,7 +1932,7 @@ class MUIDataTable extends React.Component {
 
     return (
       <Paper elevation={this.options.elevation} ref={this.tableContent} className={paperClasses}>
-        <Stack direction="row">
+        <Stack direction="row" justifyContent="space-between">
           <TableFilterListComponent
             options={this.options}
             serverSideFilterList={this.props.options.serverSideFilterList}
