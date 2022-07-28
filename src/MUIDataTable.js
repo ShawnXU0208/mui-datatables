@@ -1,6 +1,7 @@
 import Paper from '@mui/material/Paper';
 import MuiTable from '@mui/material/Table';
 import MuiTooltip from '@mui/material/Tooltip';
+import Stack from '@mui/material/Stack';
 import { withStyles } from 'tss-react/mui';
 import clsx from 'clsx';
 import assignwith from 'lodash.assignwith';
@@ -1931,60 +1932,64 @@ class MUIDataTable extends React.Component {
 
     return (
       <Paper elevation={this.options.elevation} ref={this.tableContent} className={paperClasses}>
-        {selectedRows.data.length > 0 && this.options.selectToolbarPlacement !== STP.NONE && (
-          <TableToolbarSelectComponent
+        <Stack direction="row">
+          <TableFilterListComponent
             options={this.options}
-            selectedRows={selectedRows}
-            onRowsDelete={this.selectRowDelete}
-            displayData={displayData}
-            selectRowUpdate={this.selectRowUpdate}
-            components={this.props.components}
+            serverSideFilterList={this.props.options.serverSideFilterList}
+            filterListRenderers={columns.map(c => {
+              if (c.customFilterListOptions && c.customFilterListOptions.render) return c.customFilterListOptions.render;
+              // DEPRECATED: This option is being replaced with customFilterListOptions.render
+              if (c.customFilterListRender) return c.customFilterListRender;
+
+              return f => f;
+            })}
+            customFilterListUpdate={columns.map(c => {
+              return c.customFilterListOptions && c.customFilterListOptions.update
+                ? c.customFilterListOptions.update
+                : null;
+            })}
+            filterList={filterList}
+            filterUpdate={this.filterUpdate}
+            columnNames={columnNames}
           />
-        )}
-        {(selectedRows.data.length === 0 ||
-          [STP.ABOVE, STP.NONE].indexOf(this.options.selectToolbarPlacement) !== -1) &&
-          showToolbar && (
-            <TableToolbarComponent
-              columns={columns}
-              columnOrder={columnOrder}
-              displayData={displayData}
-              data={data}
-              filterData={filterData}
-              filterList={filterList}
-              filterUpdate={this.filterUpdate}
-              updateFilterByType={this.updateFilterByType}
+          {selectedRows.data.length > 0 && this.options.selectToolbarPlacement !== STP.NONE && (
+            <TableToolbarSelectComponent
               options={this.options}
-              resetFilters={this.resetFilters}
-              searchText={searchText}
-              searchTextUpdate={this.searchTextUpdate}
-              searchClose={this.searchClose}
-              tableRef={this.getTableContentRef}
-              title={title}
-              toggleViewColumn={this.toggleViewColumn}
-              updateColumns={this.updateColumns}
-              setTableAction={this.setTableAction}
+              selectedRows={selectedRows}
+              onRowsDelete={this.selectRowDelete}
+              displayData={displayData}
+              selectRowUpdate={this.selectRowUpdate}
               components={this.props.components}
             />
           )}
-        <TableFilterListComponent
-          options={this.options}
-          serverSideFilterList={this.props.options.serverSideFilterList}
-          filterListRenderers={columns.map(c => {
-            if (c.customFilterListOptions && c.customFilterListOptions.render) return c.customFilterListOptions.render;
-            // DEPRECATED: This option is being replaced with customFilterListOptions.render
-            if (c.customFilterListRender) return c.customFilterListRender;
+          {(selectedRows.data.length === 0 ||
+            [STP.ABOVE, STP.NONE].indexOf(this.options.selectToolbarPlacement) !== -1) &&
+            showToolbar && (
+              <TableToolbarComponent
+                columns={columns}
+                columnOrder={columnOrder}
+                displayData={displayData}
+                data={data}
+                filterData={filterData}
+                filterList={filterList}
+                filterUpdate={this.filterUpdate}
+                updateFilterByType={this.updateFilterByType}
+                options={this.options}
+                resetFilters={this.resetFilters}
+                searchText={searchText}
+                searchTextUpdate={this.searchTextUpdate}
+                searchClose={this.searchClose}
+                tableRef={this.getTableContentRef}
+                title={title}
+                toggleViewColumn={this.toggleViewColumn}
+                updateColumns={this.updateColumns}
+                setTableAction={this.setTableAction}
+                components={this.props.components}
+              />
+            )}
+        </Stack>
 
-            return f => f;
-          })}
-          customFilterListUpdate={columns.map(c => {
-            return c.customFilterListOptions && c.customFilterListOptions.update
-              ? c.customFilterListOptions.update
-              : null;
-          })}
-          filterList={filterList}
-          filterUpdate={this.filterUpdate}
-          columnNames={columnNames}
-        />
+        
         <div style={{ position: 'relative', ...tableHeightVal }} className={responsiveClass}>
           {(this.options.resizableColumns === true ||
             (this.options.resizableColumns && this.options.resizableColumns.enabled)) && (
