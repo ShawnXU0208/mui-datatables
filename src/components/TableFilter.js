@@ -205,6 +205,44 @@ class TableFilter extends React.Component {
     );
   }
 
+  // renderSelect(column, index) {
+  //   const { classes, filterData, options } = this.props;
+  //   const { filterList } = this.state;
+  //   const textLabels = options.textLabels.filter;
+  //   const renderItem =
+  //     column.filterOptions && column.filterOptions.renderValue
+  //       ? column.filterOptions.renderValue
+  //       : v => (v != null ? v.toString() : '');
+  //   const width = (column.filterOptions && column.filterOptions.fullWidth) === true ? 12 : 6;
+
+  //   return (
+  //     <Grid
+  //       item
+  //       key={index}
+  //       xs={width}
+  //       classes={{ 'grid-xs-12': classes.gridListTile, 'grid-xs-6': classes.gridListTile }}>
+  //       <FormControl key={index} variant={'standard'} fullWidth>
+  //         <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
+  //         <Select
+  //           fullWidth
+  //           value={filterList[index].length ? filterList[index].toString() : textLabels.all}
+  //           name={column.name}
+  //           onChange={event => this.handleDropdownChange(event, index, column.name)}
+  //           input={<Input name={column.name} id={column.name} />}>
+  //           <MenuItem value={textLabels.all} key={0}>
+  //             {textLabels.all}
+  //           </MenuItem>
+  //           {filterData[index].map((filterValue, filterIndex) => (
+  //             <MenuItem value={filterValue} key={filterIndex + 1}>
+  //               {renderItem(filterValue)}
+  //             </MenuItem>
+  //           ))}
+  //         </Select>
+  //       </FormControl>
+  //     </Grid>
+  //   );
+  // }
+
   renderSelect(column, index) {
     const { classes, filterData, options } = this.props;
     const { filterList } = this.state;
@@ -221,24 +259,22 @@ class TableFilter extends React.Component {
         key={index}
         xs={width}
         classes={{ 'grid-xs-12': classes.gridListTile, 'grid-xs-6': classes.gridListTile }}>
-        <FormControl key={index} variant={'standard'} fullWidth>
-          <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
-          <Select
-            fullWidth
-            value={filterList[index].length ? filterList[index].toString() : textLabels.all}
-            name={column.name}
-            onChange={event => this.handleDropdownChange(event, index, column.name)}
-            input={<Input name={column.name} id={column.name} />}>
-            <MenuItem value={textLabels.all} key={0}>
-              {textLabels.all}
+        <Select
+          fullWidth
+          value={filterList[index].length ? filterList[index].toString() : textLabels.all}
+          name={column.name}
+          onChange={event => this.handleDropdownChange(event, index, column.name)}
+        >
+          <MenuItem value={textLabels.all} key={0}>
+            {textLabels.all}
+          </MenuItem>
+          {filterData[index].map((filterValue, filterIndex) => (
+            <MenuItem value={filterValue} key={filterIndex + 1}>
+              {renderItem(filterValue)}
             </MenuItem>
-            {filterData[index].map((filterValue, filterIndex) => (
-              <MenuItem value={filterValue} key={filterIndex + 1}>
-                {renderItem(filterValue)}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          ))}
+        </Select>
+
       </Grid>
     );
   }
