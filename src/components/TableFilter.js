@@ -205,44 +205,6 @@ class TableFilter extends React.Component {
     );
   }
 
-  // renderSelect(column, index) {
-  //   const { classes, filterData, options } = this.props;
-  //   const { filterList } = this.state;
-  //   const textLabels = options.textLabels.filter;
-  //   const renderItem =
-  //     column.filterOptions && column.filterOptions.renderValue
-  //       ? column.filterOptions.renderValue
-  //       : v => (v != null ? v.toString() : '');
-  //   const width = (column.filterOptions && column.filterOptions.fullWidth) === true ? 12 : 6;
-
-  //   return (
-  //     <Grid
-  //       item
-  //       key={index}
-  //       xs={width}
-  //       classes={{ 'grid-xs-12': classes.gridListTile, 'grid-xs-6': classes.gridListTile }}>
-  //       <FormControl key={index} variant={'standard'} fullWidth>
-  //         <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
-  //         <Select
-  //           fullWidth
-  //           value={filterList[index].length ? filterList[index].toString() : textLabels.all}
-  //           name={column.name}
-  //           onChange={event => this.handleDropdownChange(event, index, column.name)}
-  //           input={<Input name={column.name} id={column.name} />}>
-  //           <MenuItem value={textLabels.all} key={0}>
-  //             {textLabels.all}
-  //           </MenuItem>
-  //           {filterData[index].map((filterValue, filterIndex) => (
-  //             <MenuItem value={filterValue} key={filterIndex + 1}>
-  //               {renderItem(filterValue)}
-  //             </MenuItem>
-  //           ))}
-  //         </Select>
-  //       </FormControl>
-  //     </Grid>
-  //   );
-  // }
-
   renderSelect(column, index) {
     const { classes, filterData, options } = this.props;
     const { filterList } = this.state;
@@ -259,22 +221,24 @@ class TableFilter extends React.Component {
         key={index}
         xs={width}
         classes={{ 'grid-xs-12': classes.gridListTile, 'grid-xs-6': classes.gridListTile }}>
-        <Select
-          fullWidth
-          value={filterList[index].length ? filterList[index].toString() : textLabels.all}
-          name={column.name}
-          onChange={event => this.handleDropdownChange(event, index, column.name)}
-        >
-          <MenuItem value={textLabels.all} key={0}>
-            {textLabels.all}
-          </MenuItem>
-          {filterData[index].map((filterValue, filterIndex) => (
-            <MenuItem value={filterValue} key={filterIndex + 1}>
-              {renderItem(filterValue)}
+        <FormControl key={index} fullWidth>
+          <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
+          <Select
+            fullWidth
+            value={filterList[index].length ? filterList[index].toString() : textLabels.all}
+            name={column.name}
+            onChange={event => this.handleDropdownChange(event, index, column.name)}
+          >
+            <MenuItem value={textLabels.all} key={0}>
+              {textLabels.all}
             </MenuItem>
-          ))}
-        </Select>
-
+            {filterData[index].map((filterValue, filterIndex) => (
+              <MenuItem value={filterValue} key={filterIndex + 1}>
+                {renderItem(filterValue)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
     );
   }
@@ -296,7 +260,34 @@ class TableFilter extends React.Component {
         <FormControl key={index} fullWidth>
           <TextField
             fullWidth
-            variant={'standard'}
+            label={column.label}
+            value={filterList[index].toString() || ''}
+            data-testid={'filtertextfield-' + column.name}
+            onChange={event => this.handleTextFieldChange(event, index, column.name)}
+          />
+        </FormControl>
+      </Grid>
+    );
+  }
+
+  renderMultiTextField(column, index) {
+    const { classes } = this.props;
+    const { filterList } = this.state;
+    if (column.filterOptions && column.filterOptions.renderValue) {
+      console.warn('Custom renderValue not supported for textField filters');
+    }
+    const width = (column.filterOptions && column.filterOptions.fullWidth) === true ? 12 : 6;
+
+    return (
+      <Grid
+        item
+        key={index}
+        xs={width}
+        classes={{ 'grid-xs-12': classes.gridListTile, 'grid-xs-6': classes.gridListTile }}>
+        <FormControl key={index} fullWidth>
+          <TextField
+            fullWidth
+            multiline
             label={column.label}
             value={filterList[index].toString() || ''}
             data-testid={'filtertextfield-' + column.name}
@@ -442,6 +433,8 @@ class TableFilter extends React.Component {
                 ? this.renderMultiselect(column, index, components)
                 : filterType === 'textField'
                 ? this.renderTextField(column, index)
+                : filterType === 'multiTextField'
+                ? this.renderMultiTextField(column, index)
                 : filterType === 'custom'
                 ? this.renderCustomField(column, index)
                 : this.renderSelect(column, index);
