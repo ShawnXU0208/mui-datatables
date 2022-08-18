@@ -1955,7 +1955,7 @@ class MUIDataTable extends React.Component {
               updateFilterByType={this.updateFilterByType}
               components={this.props.components}
             />
-            <TableFilterListComponent
+            {/* <TableFilterListComponent
               options={this.options}
               serverSideFilterList={this.props.options.serverSideFilterList}
               filterListRenderers={columns.map(c => {
@@ -1974,7 +1974,7 @@ class MUIDataTable extends React.Component {
               filterList={filterList}
               filterUpdate={this.filterUpdate}
               columnNames={columnNames}
-            />
+            /> */}
           </Stack>
 
           {selectedRows.data.length > 0 && this.options.selectToolbarPlacement !== STP.NONE && (
