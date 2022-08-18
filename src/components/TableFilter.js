@@ -165,7 +165,7 @@ class TableFilter extends React.Component {
       column.filterOptions && column.filterOptions.renderValue ? column.filterOptions.renderValue : v => v;
 
     return (
-      <Grid item key={index} xs={6}>
+      <Grid item key={index} xs={12}>
         <FormGroup>
           <Grid item xs={12}>
             <Typography variant="body2" className={classes.checkboxListTitle}>
@@ -227,8 +227,7 @@ class TableFilter extends React.Component {
             fullWidth
             value={filterList[index].length ? filterList[index].toString() : textLabels.all}
             name={column.name}
-            onChange={event => this.handleDropdownChange(event, index, column.name)}
-          >
+            onChange={event => this.handleDropdownChange(event, index, column.name)}>
             <MenuItem value={textLabels.all} key={0}>
               {textLabels.all}
             </MenuItem>
@@ -403,7 +402,7 @@ class TableFilter extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.header}>
-          <div className={classes.reset}>
+          {/* <div className={classes.reset}>
             <Typography
               variant="body2"
               className={clsx({
@@ -420,7 +419,7 @@ class TableFilter extends React.Component {
               onClick={this.resetFilters}>
               {textLabels.reset}
             </Button>
-          </div>
+          </div> */}
           <div className={classes.filtersSelected} />
         </div>
         <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={4}>
@@ -441,7 +440,7 @@ class TableFilter extends React.Component {
             }
           })}
         </Grid>
-        {customFooter ? customFooter(filterList, this.applyFilters) : ''}
+        {customFooter ? customFooter(filterList, this.applyFilters, this.resetFilters) : ''}
       </div>
     );
   }
