@@ -1941,41 +1941,19 @@ class MUIDataTable extends React.Component {
 
     return (
       <Paper elevation={this.options.elevation} ref={this.tableContent} className={paperClasses}>
-        <Stack direction="row" justifyContent="space-between">
-          <Stack direction="column" sx={{ width: '100%' }}>
-            <TableFilterComponent
-              customFooter={this.options.customFilterDialogFooter}
-              columns={columns}
-              options={this.options}
-              filterList={filterList}
-              filterData={filterData}
-              onFilterUpdate={this.filterUpdate}
-              onFilterReset={this.resetFilters}
-              handleClose={this.closeFilterPopover}
-              updateFilterByType={this.updateFilterByType}
-              components={this.props.components}
-            />
-            {/* <TableFilterListComponent
-              options={this.options}
-              serverSideFilterList={this.props.options.serverSideFilterList}
-              filterListRenderers={columns.map(c => {
-                if (c.customFilterListOptions && c.customFilterListOptions.render)
-                  return c.customFilterListOptions.render;
-                // DEPRECATED: This option is being replaced with customFilterListOptions.render
-                if (c.customFilterListRender) return c.customFilterListRender;
-
-                return f => f;
-              })}
-              customFilterListUpdate={columns.map(c => {
-                return c.customFilterListOptions && c.customFilterListOptions.update
-                  ? c.customFilterListOptions.update
-                  : null;
-              })}
-              filterList={filterList}
-              filterUpdate={this.filterUpdate}
-              columnNames={columnNames}
-            /> */}
-          </Stack>
+        <Stack direction="column">
+          <TableFilterComponent
+            customFooter={this.options.customFilterDialogFooter}
+            columns={columns}
+            options={this.options}
+            filterList={filterList}
+            filterData={filterData}
+            onFilterUpdate={this.filterUpdate}
+            onFilterReset={this.resetFilters}
+            handleClose={this.closeFilterPopover}
+            updateFilterByType={this.updateFilterByType}
+            components={this.props.components}
+          />
 
           {selectedRows.data.length > 0 && this.options.selectToolbarPlacement !== STP.NONE && (
             <TableToolbarSelectComponent
